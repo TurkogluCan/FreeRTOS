@@ -30,10 +30,22 @@ SOFTWARE.
 /* Includes */
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
 
 /* Private macro */
 /* Private variables */
+TaskHandle_t  p_my_task_handle_1_st = NULL;
+TaskHandle_t  p_my_task_handle_2_st = NULL;
+
+
+
 /* Private function prototypes */
+void task_1_handle_fp(void *params_vp);
+void task_2_handle_fp(void *params_vp);
+
+
 /* Private functions */
 
 /**
@@ -47,12 +59,9 @@ int main(void)
 {
 
 
-	// INIT
-
-	RCC_DeInit();
-	SystemCoreClockUpdate();
-
-
+  // INIT
+  RCC_DeInit();						// System clock 16MHz olarak ayarlandi
+  SystemCoreClockUpdate();			// System clock update edildi
 
 
   /* Initialize LEDs */
@@ -69,6 +78,28 @@ int main(void)
 
 
 
+  //FreeRTOS INIT
+
+  xTaskCreate( task_1_handle_fp,                // Function Pointer
+               "Task_1",                        // Task name
+			   configMINIMAL_STACK_SIZE,        // Stack size
+               NULL                    ,        // Function Parameter
+               1                       ,		// PRIORTY
+			   &p_my_task_handle_1_st   );      // Task object
+
+
+  xTaskCreate( task_2_handle_fp,                // Function Pointer
+               "Task_2",                        // Task name
+			   configMINIMAL_STACK_SIZE,        // Stack size
+               NULL                    ,        // Function Parameter
+               1                       ,		// PRIORTY
+			   &p_my_task_handle_2_st   );      // Task object
+
+
+
+
+
+  vTaskStartScheduler();
 
 
 
@@ -82,6 +113,46 @@ int main(void)
 
   }
 }
+
+
+
+//!< CREATED TASK BEGIN   <<
+
+
+
+void task_1_handle_fp(void *params_vp)
+{
+	int a = 0;
+
+	while(1)
+	{
+		a++;
+
+
+	}
+}
+
+
+void task_2_handle_fp(void *params_vp)
+{
+	int b = 0;
+
+
+	while(1)
+	{
+		b++;
+
+	}
+}
+
+
+
+//!< CREATED TASK END    >>
+
+
+
+
+
 
 
 /*
