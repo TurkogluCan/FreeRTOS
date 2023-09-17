@@ -28,6 +28,7 @@ SOFTWARE.
 */
 
 /* Includes */
+#include "stdio.h"
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
 #include "FreeRTOS.h"
@@ -38,7 +39,7 @@ SOFTWARE.
 /* Private variables */
 TaskHandle_t  p_my_task_handle_1_st = NULL;
 TaskHandle_t  p_my_task_handle_2_st = NULL;
-
+uint8_t       syc_task_1_u8, syc_task_2_u8;
 
 
 /* Private function prototypes */
@@ -47,6 +48,21 @@ void task_2_handle_fp(void *params_vp);
 
 
 /* Private functions */
+
+// Printf
+int _write(int32_t file, uint8_t *ptr, int32_t len)
+{
+	/* Implement your write code here, this is used by puts and printf for example */
+
+	for(int i = 0; i < len; i++)
+	{
+		ITM_SendChar(ptr[i]);
+	}
+
+	return len;
+}
+
+
 
 /**
 **===========================================================================
@@ -80,6 +96,7 @@ int main(void)
 
   //FreeRTOS INIT
 
+  // 1. TASK YARATILIR
   xTaskCreate( task_1_handle_fp,                // Function Pointer
                "Task_1",                        // Task name
 			   configMINIMAL_STACK_SIZE,        // Stack size
@@ -97,11 +114,8 @@ int main(void)
 
 
 
-
-
+  // 2. TASKLAR ZAMANLANIR
   vTaskStartScheduler();
-
-
 
 
 
@@ -122,12 +136,12 @@ int main(void)
 
 void task_1_handle_fp(void *params_vp)
 {
-	int a = 0;
 
 	while(1)
 	{
-		a++;
+		syc_task_1_u8++;
 
+		printf("TASK-1 \n");
 
 	}
 }
@@ -135,13 +149,12 @@ void task_1_handle_fp(void *params_vp)
 
 void task_2_handle_fp(void *params_vp)
 {
-	int b = 0;
-
 
 	while(1)
 	{
-		b++;
+		syc_task_2_u8++;
 
+		printf("TASK-2 \n");
 	}
 }
 
