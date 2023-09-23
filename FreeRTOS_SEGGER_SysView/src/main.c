@@ -76,8 +76,14 @@ int main(void)
 
 
   // INIT
+  DWT->CTRL |= (1 << 0);            // TODO: Bu kisim incelenecek, register icerisine bakilacak
+
   RCC_DeInit();						// System clock 16MHz olarak ayarlandi
   SystemCoreClockUpdate();			// System clock update edildi
+
+  SEGGER_SYSVIEW_Conf();
+  SEGGER_SYSVIEW_Start();
+
 
 
   /* Initialize LEDs */
