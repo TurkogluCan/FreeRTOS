@@ -34,7 +34,6 @@
 *.app
 *.i*86
 *.x86_64
-*.hex
 
 
 # Debug files
@@ -42,6 +41,8 @@
 *.su
 *.idb
 *.pdb
+*.list
+
 
 # Kernel Module Compile Results
 *.mod*
@@ -55,5 +56,4 @@ dkms.conf
 
 
 
-*.xml
 *.metadata

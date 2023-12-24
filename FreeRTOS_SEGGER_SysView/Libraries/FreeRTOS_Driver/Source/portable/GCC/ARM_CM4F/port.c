@@ -492,13 +492,20 @@ void xPortSysTickHandler( void )
 	save and then restore the interrupt mask value as its value is already
 	known. */
 	portDISABLE_INTERRUPTS();
+
+  	traceISR_ENTER();  																			//!< Segger patch entegrasyonu sirasinda burasi eklenmemis, sonradan ekledim
 	{
 		/* Increment the RTOS tick. */
 		if( xTaskIncrementTick() != pdFALSE )
 		{
+			traceISR_EXIT_TO_SCHEDULER();
 			/* A context switch is required.  Context switching is performed in
 			the PendSV interrupt.  Pend the PendSV interrupt. */
 			portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;
+		}
+		else
+		{
+			traceISR_EXIT();    																//!< Segger patch entegrasyonu sirasinda burasi eklenmemis, sonradan ekledim
 		}
 	}
 	portENABLE_INTERRUPTS();
